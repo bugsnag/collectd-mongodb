@@ -23,7 +23,7 @@ class MongoDB(object):
         self.accesses = None
         self.misses = None
 
-    def submit(self, type, instance, value, db=None):
+    def submit(self, typ, instance, value, db=None):
         if db:
             plugin_instance = '%s-%s' % (self.mongo_port, db)
         else:
@@ -31,7 +31,7 @@ class MongoDB(object):
         v = collectd.Values()
         v.plugin = self.plugin_name
         v.plugin_instance = plugin_instance
-        v.type = type
+        v.type = typ
         v.type_instance = instance
         v.values = [value, ]
         v.dispatch()
@@ -114,6 +114,16 @@ class MongoDB(object):
             self.submit('file_size', 'storage', db_stats['storageSize'], mongo_db)
             self.submit('file_size', 'index', db_stats['indexSize'], mongo_db)
             self.submit('file_size', 'data', db_stats['dataSize'], mongo_db)
+
+        # wiredtiger
+        if 'wiredTiger' in server_status:
+            cachestats = server_status['wiredTiger']['cache']
+
+            cache_used_percent = cache_stats['bytes currently in the cache'] / cache_stats['maximum bytes configured']
+
+            # cache usage percentage
+            self.submit('wiredtiger', 'cache_used_percent', cache_used_percent)
+
 
         con.close()
 
