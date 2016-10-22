@@ -117,7 +117,7 @@ class MongoDB(object):
 
         # wiredtiger
         if 'wiredTiger' in server_status:
-            cachestats = server_status['wiredTiger']['cache']
+            cache_stats = server_status['wiredTiger']['cache']
 
             cache_used_percent = cache_stats['bytes currently in the cache'] / cache_stats['maximum bytes configured']
 
