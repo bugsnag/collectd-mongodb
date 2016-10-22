@@ -122,7 +122,7 @@ class MongoDB(object):
             cache_used_percent = cache_stats['bytes currently in the cache'] / cache_stats['maximum bytes configured']
 
             # cache usage percentage
-            self.submit('wiredtiger', 'cache_used_percent', cache_used_percent)
+            self.submit('percent', 'wiredtiger_cache_used', cache_used_percent)
 
 
         con.close()
