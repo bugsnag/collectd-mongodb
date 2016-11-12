@@ -6,7 +6,6 @@ import collectd
 from pymongo import MongoClient
 from pymongo.read_preferences import ReadPreference
 from distutils.version import LooseVersion as V
-from math import ceil
 
 
 class MongoDB(object):
@@ -127,9 +126,7 @@ class MongoDB(object):
 
         if 'connections' in server_status:
             connections = server_status['connections']
-            self.submit('counter', 'active_connections', connections['current'])
-            self.submit('counter', 'available_connections', connections['available'])
-            self.submit('percent', 'connections_used', ceil((connections['current'] / (connections['current'] + connections['available'])) * 100))
+            self.submit('percent', 'connections_used', (connections['current'] / (connections['current'] + connections['available'])) * 100)
 
         con.close()
 
